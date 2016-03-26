@@ -25,9 +25,8 @@
 #  \date   02.10.09
 #  \author Oliver Melchert
 import sys,os,math
+from math import pow, sqrt
 
-pow=math.pow
-sqrt=math.sqrt
 def div(a,b): return(float(a)/float(b))
 
 
@@ -50,11 +49,11 @@ def rootBisection(myFunc,xMin,xMax,epsilon):
     # initialize function value at interval boundaries
     fMin = myFunc(xMin)
     fMax = myFunc(xMax)
-    file=sys.stdout
-    file.write("# epsilon=%lf\n"%(epsilon))
-    file.write("# iter: [xMin,xMax]; [fMin,fMax]\n")
+    f=sys.stdout
+    f.write("# epsilon=%lf\n"%(epsilon))
+    f.write("# iter: [xMin,xMax]; [fMin,fMax]\n")
 
-    iter=0
+    it=0
     # as long as distance of best function value
     # encountered so far is further away from the
     # desired function value than epsilon: iterate
@@ -69,8 +68,8 @@ def rootBisection(myFunc,xMin,xMax,epsilon):
         # interval, hence discard right half
         else: xMax=midPt; fMax=fMidPt
 
-        iter+=1
-        file.write("%3d: [%10.9lf,%10.9lf] [%10.9lf,%10.9lf]\n"%(iter,xMin,xMax,fMin,fMax))
+        it+=1
+        f.write("%3d: [%10.9lf,%10.9lf] [%10.9lf,%10.9lf]\n"%(it,xMin,xMax,fMin,fMax))
 
     # return final value xMin +- epsilon
     return div(xMin+xMax,2)
@@ -137,16 +136,16 @@ def amoeba(my_func,p,y,opt_flag,ftol,report_fitness):
     NMAX = 20   # maximum allowed dimensions
 
     ndim = len(y)-1 # number of scaling parameters
-    iter=0      # start iterations counter
+    it=0      # start iterations counter
 
     psum = [1.0 for i in range(ndim)] # create psum array
 
     # get psum
     for n in range(ndim):
-        sum = 0.
+        s = 0.
         for m in range(ndim+1):
-            sum += p[m][n]
-        psum[n]=sum
+            s += p[m][n]
+        psum[n]=s
 
     # start iteration
     while(1):
@@ -170,7 +169,7 @@ def amoeba(my_func,p,y,opt_flag,ftol,report_fitness):
         # determine fractional range from highest to lowest value
         rtol = 2.0 * abs(y[ihi]-y[ilo]) / 1.0*(abs(y[ihi]) + abs(y[ilo]) + TINY)
         # report best fitness in current simplex to stdout
-        if(report_fitness): print iter, y[ilo], rtol
+        if(report_fitness): print it, y[ilo], rtol
         # return if satisfactory,
         # first put best vertex to slot 0
         if(rtol < ftol):
@@ -178,14 +177,14 @@ def amoeba(my_func,p,y,opt_flag,ftol,report_fitness):
             for n in range(ndim):
                 p[0][n],p[ilo][n]   = p[ilo][n],p[0][n]
 
-            return p[0],y[0],iter
+            return p[0],y[0],it
 
         # report if no iterations left
-        if(iter > ITMAX):
+        if(it > ITMAX):
             print "ITMAX exceeded in amoeba"
             sys.exit(1)
 
-        iter += 2   # start new iteration
+        it += 2   # start new iteration
 
         # reflect simplex from the high point
         # extrapolate with factor -1 through face
@@ -212,15 +211,15 @@ def amoeba(my_func,p,y,opt_flag,ftol,report_fitness):
                                 psum[j]=p[i][j] #mel
 
                         y[i]=my_func(psum)
-                iter+=1
+                it+=1
                 # get psum
                 for n in range(ndim):
-                    sum = 0.
+                    s = 0.
                     for m in range(ndim+1):
-                        sum += p[m][n]
-                    psum[n]=sum
+                        s += p[m][n]
+                    psum[n]=s
         else:
-            iter -=1
+            it -=1
 
 def amotry(my_func,p,y,psum,ndim,ihi,fac,opt_flag):
     '''Extrapolate by factor fac through simplex face
