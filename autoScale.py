@@ -1,3 +1,4 @@
+#!/usr/bin/env python2
 ## \file   autoScale.py
 #  \brief  a prograom for automatic finite size scaling analyses
 #
