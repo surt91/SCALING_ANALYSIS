@@ -546,8 +546,6 @@ class myFunc(myRawData, myScaleAssumption):
                         # extimate 'quality' of the current point
                         chi2 = div((y - Y) * (y - Y), dy * dy + dY2)
                         SList.append(float(chi2))
-            del sVal
-            del subSet
 
         # determine quality of the data collapse
         if len(SList) > 0:
