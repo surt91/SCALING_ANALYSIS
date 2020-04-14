@@ -26,7 +26,7 @@
 #  \author Oliver Melchert
 import sys, os, math
 from math import pow, sqrt
-import bisect
+
 
 def div(a, b):
     return float(a) / (float(b)+1e-6)
@@ -579,12 +579,18 @@ class myFunc(myRawData, myScaleAssumption):
         subSet = []
         for L in [L for L in self.dataSet.keys() if L != pivVal.L]:
             # initialize 'empty' min/max pair for this system size
-            data = [self.scale(i).x for i in self.dataSet[L]]
-            min_idx = bisect.bisect_left(data, sPiv.x) - 1
-            max_idx = min_idx + 1
-            minVal = self.scale(self.dataSet[L][min_idx]) if min_idx > 0 else None
-            maxVal = self.scale(self.dataSet[L][max_idx]) if max_idx < len(data) else None
-
+            maxVal, minVal = None, None
+            for val in self.dataSet[L]:
+                sVal = self.scale(val)
+                # get largest smaller value
+                if sPiv.x >= sVal.x and (minVal is None or sVal.x <= minVal):
+                    minVal = sVal
+                # get smallest larger value
+                if sVal.x > sPiv.x and (maxVal is None or sVal.x >= maxVal):
+                    maxVal = sVal
+                # elif sVal.x>sPiv.x and sVal.x<=maxVal:
+                #   maxVal=sVal
+                del sVal
             # add min/max pair to current set if both 'exist'
             if minVal is not None and maxVal is not None:
                 subSet += [minVal, maxVal]
