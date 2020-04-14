@@ -583,10 +583,10 @@ class myFunc(myRawData, myScaleAssumption):
             for val in self.dataSet[L]:
                 sVal = self.scale(val)
                 # get largest smaller value
-                if sPiv.x >= sVal.x >= minVal:
+                if sPiv.x >= sVal.x and (minVal is None or sVal.x <= minVal):
                     minVal = sVal
                 # get smallest larger value
-                if sVal.x > sPiv.x and (maxVal is None or sVal.x <= maxVal):
+                if sVal.x > sPiv.x and (maxVal is None or sVal.x >= maxVal):
                     maxVal = sVal
                 # elif sVal.x>sPiv.x and sVal.x<=maxVal:
                 #   maxVal=sVal
