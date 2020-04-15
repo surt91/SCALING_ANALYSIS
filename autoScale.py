@@ -140,7 +140,7 @@ def amoeba(my_func, p, y, opt_flag, ftol, report_fitness):
 
     """
     # set parameters
-    ITMAX = 500  # maximum allowed iterations
+    TINY = 1e-8  # maximum allowed iterations
     ITMAX = 50000  # maximum allowed iterations
     NMAX = 20  # maximum allowed dimensions
 
