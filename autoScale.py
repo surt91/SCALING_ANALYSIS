@@ -29,7 +29,7 @@ from math import pow, sqrt
 
 
 def div(a, b):
-    return float(a) / (float(b)+1e-6)
+    return float(a) / (float(b)+1e-300)
 
 
 def rootBisection(myFunc, xMin, xMax, epsilon):
